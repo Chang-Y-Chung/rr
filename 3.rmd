@@ -309,7 +309,7 @@ Indicate if the following statement is true or false:
 
 ## Cloning
 
-- a public repository on GitHub can be easily `clone`ed
+- a public repository on GitHub can be easily `clone`d
 
 - get a copy of all the slides for this workshop
 
@@ -320,18 +320,87 @@ git clone https://github.com/Chang-Y-Chung/rr
 
 ## Push to a GitHub repo
 
-Requirements
-    - a GitHub account (sign up)
+Requirement: a GitHub account (sign up)
 
-Pushing your local repo to GitHub requires three steps:
-    1. Create a new repo on GitHub
-    2. `git remote` to set a remote branch pointing to your GitHub repo
-    3. `git push` to actually upload files to GitHub repo
+```{r eval=F, highlight=F}
+> git init
+> git add (many files including presentation .rmd and .html)
+> git commit -m "initial commit"
+> git remote add origin https://github.com/Chang-Y-Chung/rr.git
+> git push -u origin master
+Username for 'https://github.com':
+Password for 'https://chang-y-chung@github.com':
+To https://github.com/Chang-Y-Chung/rr.git
+ * [new branch]      master -> master
+Branch master set up to track remote branch master from origin.
+```
 
-- Git remote branches are pointers to branches in your remote repositories.
+## Pull from a GitHub repo
 
-- If you `clone` a GitHub repository, then the local repo will have a remote branch `origin/master` automatically setup
+Once set up in the previous slide, pulling down any updates from GitHub gets simple:
 
-- If you have permission to write to the GitHub repo, then you can `git push` to it.
+```{r eval=F, highlight=F}
+> git pull
+Already up-to-date.
+```
+
+- `git pull` does both `git fetch` and `git merge`
+
+## Pull request
+
+- Creating PR: A potential collaborator
+    * makes a copy of a GitHub repo under own GitHub account ("Forking")
+    * pull down to local repo
+    * create a PR branch and fix a bug or implement a feature
+    * push the change back to own GitHub repo and
+    * send the original project account a PR
+
+- Reviewing/Accepting PR: Original project owner
+    * once received a pull request, review code and documentation
+    * if it is OK, then pull from the PR branch of the collaborator's GitHub repo into local master
+    * once merged, push it back up to the project GitHub repo
+
+## Creating pull request
+
+- Diagram from Kevin Markham's [simple guide to forks](http://www.dataschool.io/simple-guide-to-forks-in-github-and-git/)<br/><img src="images/github1.png" width="60%" /> 
+- GitHub Help on [Collaborating](https://help.github.com/categories/collaborating/)
+- Hadley Wickham's writing on [RStudio, Git and GitHub](http://r-pkgs.had.co.nz/git.html).
+
+## Git/GitHub Learning Resources
+
+- Chacon and Straub (2014) Pro Git. Available at <http://git-scm.com/book/en/v2>
+- Karl Broman's tutorials <http://kbroman.org/pages/tutorials.html>
+- Gregg Pollack's Try Git video and hands-on at Code School <https://www.codeschool.com/courses/try-git>
+- Kevin Markham's YouTube channel <https://www.youtube.com/user/dataschool>
+
+
+## Reproducible Research Checklist
+
+1. Are we doing good science?
+2. Was any part of this analysis done by hand?
+3. Have we taught a computer to do as much as possible (i.e. coded)?
+4. Are we using a version control system?
+5. Have we documented our software environment?
+6. Have we saved any output that we cannot reconstruct from original data + code?
+7. How far back in the analysis pipeline can we go before our results are no longer (automatically) reproducible?
+
+<small>Roger Peng (2014) "Reproducible Research Checklist" Lecture note for the Coursera Course titled "Reproducible Research". Accessed at <https://github.com/rdpeng/courses> on Jan, 2015.</small>
+
+## Quiz
+
+True or False?
+
+1. If any part of the analysis was done by hand, then the research is not reproducible. (T/F)
+
+2. It is a good idea to call `sessionInfo()` in your R code. (T/F)
+
+3. Always make sure to call `set.seed()`; Feel free to call `date()`. (T/F)
+
+## The End
+
+- Any questions?
+
+- Please fill out the feedback form. Thanks a lot!
+
 
 

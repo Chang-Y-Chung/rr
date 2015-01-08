@@ -63,7 +63,7 @@ Buckheit and Donoho (1995)'s distillation of Claerbout and Karrenbach (1992)'s i
 
 ## Research Pipeline
 
-<img src="images/researchpipeline.png" width="85%" />
+<img src="images/researchpipeline.png" width="75%" />
 
 <small><small><small>Peng, Roger (2011) "Computational and Policy Tools for Reproducible Research" presentation at _Reproducible Research: Tools and Strategies for Scientific Computing_, a workshop in association with Applied Mathematics Perspectives 2011, University of British Columbia, Vancouver, BC, Canada. July 13-16, 2011. page 6.</small></small></small>
 
@@ -209,10 +209,12 @@ p <- summary(fit)$coefficients[,"Pr(>|t|)"]
 ```
 
 - we can write a text like:
-    <small><pre><code>The coefficient of the speed variable is &#96;r b['speed']&#96; with the p-value of &#96;r p['speed']&#96;.</code></pre></small>
+    <small><pre><code>The coefficient of the speed variable is &#96;r b['speed']&#96; with
+the p-value of &#96;r p['speed']&#96;.</code></pre></small>
     
 - which will be shown as:
-    <small><pre><code>The coefficient of the speed variable is `r fmt(b['speed'])` with the p-value of `r fmt(p['speed'])`.</code></pre></small>
+    <small><pre><code>The coefficient of the speed variable is `r fmt(b['speed'])` with
+the p-value of `r fmt(p['speed'])`.</code></pre></small>
     
 ## Regression Table
 
@@ -263,7 +265,7 @@ output:
 
 - Code chunks
 
-<pre><code><<myChunk, options...>>=
+<pre><code><< myChunk, options... >>=
   ... r code
 @</code></pre>
   
@@ -275,3 +277,4 @@ output:
 
 ## Q & A
 
+- any questions?
