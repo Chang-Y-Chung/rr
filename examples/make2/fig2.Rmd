@@ -1,0 +1,12 @@
+---
+output: html_document
+---
+
+# fig2.Rmd
+
+```{r}
+df <- readRDS('ana.Rds')
+png('fig2.png');plot(df$x, df$y);lines(df$x, df$y);dev.off()
+```
+
+This will not display anything, but create the file, fig2.png in the current working directory.

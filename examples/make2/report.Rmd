@@ -1,0 +1,24 @@
+---
+title: "My Report"
+author: "Chang Y. Chung"
+date: "Jan, 2015"
+output: html_document
+---
+
+# Introduction
+
+This reports presents two plots using analytic data.
+
+## First plot
+
+![](fig1.png)
+
+## Second plot
+
+![](fig2.png)
+
+# Done
+
+That's all falks!
+
+

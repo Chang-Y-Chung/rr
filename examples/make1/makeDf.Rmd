@@ -1,0 +1,18 @@
+---
+title: "makeDf"
+author: "Chang Y. Chung"
+date: "Monday, January 05, 2015"
+output: html_document
+---
+
+This is makeDf.Rmd, which creates df.Rds.
+
+```{r}
+df <- data.frame(x=1:5, y=seq(2, 10, 2))
+
+# check
+df
+
+# save
+saveRDS(df, file="df.Rds")
+```

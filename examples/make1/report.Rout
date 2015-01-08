@@ -1,0 +1,7 @@
+  |                                                                         |                                                                 |   0%  |                                                                         |................................                                 |  50%
+  ordinary text without R code
+
+  |                                                                         |.................................................................| 100%
+label: unnamed-chunk-1
+
+"C:/Users/cchung/AppData/Local/Pandoc/pandoc" report.utf8.md --to html --from markdown+autolink_bare_uris+ascii_identifiers+tex_math_single_backslash-implicit_figures --output report.html --smart --email-obfuscation none --self-contained --standalone --section-divs --template "C:\Users\cchung\Documents\R\win-library\3.1\rmarkdown\rmd\h\default.html" --variable "theme:bootstrap" --include-in-header "C:\Users\cchung\AppData\Local\Temp\Rtmps30lDT\rmarkdown-str13d8c688b6a25.html" --mathjax --variable "mathjax-url:https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" --no-highlight --variable highlightjs=report_files/highlight 

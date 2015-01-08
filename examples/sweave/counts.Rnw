@@ -1,0 +1,141 @@
+% !Rnw weave = knitr
+\documentclass{article}
+\usepackage[sc]{mathpazo}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\geometry{verbose,tmargin=2.5cm,bmargin=2.5cm,lmargin=2.5cm,rmargin=2.5cm}
+\setcounter{secnumdepth}{2}
+\setcounter{tocdepth}{2}
+\usepackage{url}
+\usepackage[unicode=true,pdfusetitle,
+ bookmarks=true,bookmarksnumbered=true,bookmarksopen=true,bookmarksopenlevel=2,
+ breaklinks=false,pdfborder={0 0 1},backref=false,colorlinks=false]
+ {hyperref}
+\hypersetup{pdfstartview={XYZ null null 1}}
+
+\begin{document}
+
+<<setup, include=FALSE, cache=FALSE>>=
+library(knitr)
+# set global chunk options
+opts_chunk$set(fig.align='center', fig.show='hold')
+options(width=90)
+@
+
+\title{Counts Check}
+\author{Chang Y. Chung}
+\date{December 30, 2014}
+\maketitle
+
+\tableofcontents
+
+\section*{Introduction}
+\addcontentsline{toc}{section}{Introduction}
+
+This document implements some checks regarding win, loss, and skip counts in the data as attached in Matt's email I have received on Dec. 30, 2014.
+
+\section*{Read and verify raw data}
+\addcontentsline{toc}{section}{Read and verify raw data}
+
+First, uncompress .zip file in order to get the data files out:
+
+<<unzip, engine='bash'>>=
+unzip -u -qq Received/20141230/data_precleaned.zip
+@
+
+Unzipping it creates the data\_{}precleaned directory where the uncompressed data, .csv files reside. Let's read them into data frames.
+
+<<read_data, cache=FALSE>>=
+rm(list=ls())
+setwd("~/Professional/Matt/")
+library(sqldf)
+options(width=90)
+
+readcsv <- function(file) read.csv(file=file, header=T, sep=",", stringsAsFactors=F,
+    na.strings="NA")
+fs <- (function(dir) paste(dir, list.files(dir), sep="/"))("data_precleaned")
+csvs <- fs[grepl("_cleaned", fs)]
+fn <- function(s) {w <- strsplit(s, "_")[[1]]; paste0(w[4], w[3], substr(w[8],1,1))}
+ge <- globalenv()
+dimension <- function(s) {d <- dim(eval(parse(text=s), envir=ge));
+    sprintf('%s (%d rows, %d columns)', s, d[1], d[2])}
+df <- function(csv) {n <- fn(csv); assign(n, readcsv(csv), envir=ge); dimension(n)}
+Map(df, csvs)
+@
+
+Notice that the number of rows has been changed for some data, assuming that
+``public'' and ``restricted'' were ``cleaned'' and ``raw'' before, respectively.
+
+\begin{itemize}
+  \item nonvotes 504 restricted has \Sexpr{nrow(nonvotes504r)} rows vs 8786, before
+  \item votes 504 restricted has \Sexpr{nrow(votes504r)} rows vs 28471, before
+  \item nonvotes 608 restricted has \Sexpr{nrow(nonvotes608r)} rows vs 14454, before
+\end{itemize}
+
+\section*{Wins and Losses}
+\addcontentsline{toc}{section}{Wins and Losses}
+
+For this, we are re-using the check1 function from reviewRaw2.pdf with a minor modification that allows public/restricted types.
+
+<<check1>>=
+library(sqldf)
+str2df <- function(str) eval(as.name(str))
+check1 <- function(svyid, type) {
+    votes <- str2df(paste0('votes', svyid, type))
+    validVotes <- votes[votes$Valid, ]
+    wins <- sqldf('select [Winner.ID], count(*) as wins from validVotes group by 1')
+    losses <- sqldf('select [Loser.ID], count(*) as losses from validVotes group by 1')
+    ideas <- str2df(paste0('ideas', svyid, type))
+    standing <- sqldf('select i.[Wikisurvey.ID], i.[Idea.ID],
+        i.Wins as ideasWins, i.Losses as ideasLosses,
+        case when w.wins is null then 0 else w.wins end as votesWins,
+        case when l.losses is null then 0 else l.losses end as votesLosses
+        from ideas i
+            left outer join wins w on i.[Idea.ID] = w.[Winner.ID]
+            left outer join losses l on i.[Idea.ID] = l.[Loser.ID]')
+    nomatch <- sqldf('select * from standing
+        where ideasWins != votesWins or ideasLosses != votesLosses')
+    nomatch
+}
+check1(504, 'p')
+check1(504, 'r')
+check1(608, 'p')
+check1(608, 'r')
+@
+
+\section*{Skips}
+\addcontentsline{toc}{section}{Skips}
+
+For checking the skip counts, we re-use the check2 function with a slight change in order to accomodate two different types of data: public and restricted.
+<<skips>>=
+library(sqldf)
+check2 <- function(svyid, type) {
+    nonvotes <- str2df(paste0('nonvotes', svyid, type))
+    noNA <- sqldf('select * from nonvotes
+        where [Left.Choice.ID] is not null and [Record.Type] = \'Skip\'')
+    left <- sqldf('select [Left.Choice.ID], count(*) as nSkips from noNA group by 1')
+    right <- sqldf('select [Right.Choice.ID], count(*) as nSkips from noNA group by 1')
+    ideas <- str2df(paste0('ideas', svyid, type))
+    names(ideas)[names(ideas) == 'Times.involved.in.Cant.Decide'] <- 'Skips'
+    skips <- sqldf('select i.[Wikisurvey.ID], i.[Idea.ID], i.Skips as ideaSkips,
+        case when l.nSkips is null then 0 else l.nSkips end as nonvoteLeftSkips,
+        case when r.nSkips is null then 0 else r.nSkips end as nonvoteRightSkips
+        from ideas as i
+            left outer join left as l on i.[Idea.ID] = l.[Left.Choice.ID]
+            left outer join right as r on i.[Idea.ID] = r.[Right.Choice.ID]')
+    nomatch <- sqldf('select * from skips
+        where ideaSkips != (nonvoteLeftSkips + nonvoteRightSkips)')
+    nomatch
+}
+check2(504, 'p')
+check2(504, 'r')
+check2(608, 'p')
+check2(608, 'r')
+@
+
+\section*{Done}
+\addcontentsline{toc}{section}{Done}
+
+This conclude checking counts for Matt's new data.
+
+\end{document}

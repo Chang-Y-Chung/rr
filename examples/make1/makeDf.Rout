@@ -1,0 +1,7 @@
+  |                                                                         |                                                                 |   0%  |                                                                         |................................                                 |  50%
+  ordinary text without R code
+
+  |                                                                         |.................................................................| 100%
+label: unnamed-chunk-1
+
+"C:/Users/cchung/AppData/Local/Pandoc/pandoc" makeDf.utf8.md --to html --from markdown+autolink_bare_uris+ascii_identifiers+tex_math_single_backslash-implicit_figures --output makeDf.html --smart --email-obfuscation none --self-contained --standalone --section-divs --template "C:\Users\cchung\Documents\R\win-library\3.1\rmarkdown\rmd\h\default.html" --variable "theme:bootstrap" --include-in-header "C:\Users\cchung\AppData\Local\Temp\Rtmpk53Bnd\rmarkdown-str145cc7a80415a.html" --mathjax --variable "mathjax-url:https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" --no-highlight --variable highlightjs=makeDf_files/highlight 

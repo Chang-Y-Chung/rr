@@ -1,0 +1,19 @@
+---
+title: "report"
+author: "Chang Y. Chung"
+date: "Monday, January 05, 2015"
+output: html_document
+---
+
+This is report.Rmd, which loads df.Rds and generates a report,
+report.html, which includes a plot.
+
+```{r}
+df <- readRDS("df.Rds")
+
+# check
+str(df)
+
+# plot
+plot(df$x, df$y)
+```
